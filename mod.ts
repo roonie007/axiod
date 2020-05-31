@@ -187,8 +187,8 @@ const request = ({
           statusText: _statusText,
           data: _data,
           headers: _headers,
-          config: _config,
         },
+        config: _config,
       };
 
       return Promise.reject(error);
