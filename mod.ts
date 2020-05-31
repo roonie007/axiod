@@ -57,10 +57,14 @@ axiod.request = ({
   }
 
   // Method
-  if (methods.indexOf(method.toLowerCase().trim()) === -1) {
-    throw new Error(`Method ${method} is not supported`);
+  if (method) {
+    if (methods.indexOf(method.toLowerCase().trim()) === -1) {
+      throw new Error(`Method ${method} is not supported`);
+    } else {
+      method = method.toLowerCase().trim();
+    }
   } else {
-    method = method.toLowerCase().trim();
+    method = "get";
   }
 
   // Params
@@ -109,8 +113,16 @@ axiod.request = ({
   // Add body to Request Config
   if (data && method !== "get") {
     // transformRequest
-    if (transformRequest) {
-      data = transformRequest(data, headers);
+    if (
+      transformRequest &&
+      Array.isArray(transformRequest) &&
+      transformRequest.length > 0
+    ) {
+      for (var i = 0; i < (transformRequest || []).length; i++) {
+        if (transformRequest && transformRequest[i]) {
+          data = transformRequest[i](data, headers);
+        }
+      }
     }
 
     if (typeof data === "string" || data instanceof FormData) {
@@ -139,10 +151,38 @@ axiod.request = ({
     fetchRequestObject.headers = _headers;
   }
 
+  // [TODO] Mouadh HSOUMI
+  // Remove commented test when Abort is supported by Deno
+  // https://github.com/denoland/deno/issues/5471
+  // https://github.com/Code-Hex/deno-context/issues/8
+  // Timeout
+  // const controller = new AbortController();
+  // fetchRequestObject.signal = controller.signal;
+
+  // let timeoutVar: number = 0;
+  // console.log("timeout", timeout);
+  // if ((timeout || 0) > 0) {
+  //   timeoutVar = setTimeout(() => {
+  //     timeoutVar = 0;
+  //     console.log("Cancecled controller.abort()");
+  //     controller.abort();
+  //   }, timeout);
+  // }
+
+  // Start request
   return fetch(url, fetchRequestObject).then(async (x) => {
+    // // Clear timeout
+    // if (timeoutVar) {
+    //   clearTimeout(timeoutVar);
+    // }
+
     const _status: number = x.status;
     const _statusText: string = x.statusText;
+
+    // Data
     let _data: any = null;
+
+    // Check content type and then do the needed transformations
     const contentType = x.headers.get("content-type") || "";
     if (contentType.toLowerCase().indexOf("json") === -1) {
       // Try to convert to json
@@ -157,7 +197,17 @@ axiod.request = ({
 
     // transformResponse
     if (transformResponse) {
-      _data = transformResponse(_data);
+      if (
+        transformResponse &&
+        Array.isArray(transformResponse) &&
+        transformResponse.length > 0
+      ) {
+        for (var i = 0; i < (transformResponse || []).length; i++) {
+          if (transformResponse && transformResponse[i]) {
+            _data = transformResponse[i](_data);
+          }
+        }
+      }
     }
 
     const _headers: Headers = x.headers;

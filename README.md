@@ -6,9 +6,10 @@ Promise based HTTP client for Deno inpired by axios
 
 - Make http requests from node.js
 - Supports the Promise API
-- Intercept request and response [TODO]
-- Transform request and response data [TODO]
+- Intercept request and response
+- Transform request and response data
 - Automatic transforms for JSON data
+- Cancel requests [Waiting for deno support of Fetch Abort using signal and AbortController]
 
 ## Usage
 
@@ -243,6 +244,34 @@ These are the available config options for making requests. Only the url is requ
     username: 'janedoe',
     password: 's00pers3cret'
   }
+
+  // `validateStatus` defines whether to resolve or reject the promise for a given
+  // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+  // or `undefined`), the promise will be resolved; otherwise, the promise will be
+  // rejected.
+  validateStatus: function (status) {
+    return status >= 200 && status < 300; // default
+  },
+
+
+  // `transformRequest` allows changes to the request data before it is sent to the server
+  // This is only applicable for request methods 'PUT', 'POST', 'PATCH' and 'DELETE'
+  // The last function in the array must return a string or an instance of Buffer, ArrayBuffer,
+  // FormData or Stream
+  // You may modify the headers object.
+  transformRequest: [function (data, headers) {
+    // Do whatever you want to transform the data
+
+    return data;
+  }],
+
+  // `transformResponse` allows changes to the response data to be made before
+  // it is passed to then/catch
+  transformResponse: [function (data) {
+    // Do whatever you want to transform the data
+
+    return data;
+  }],
 }
 ```
 

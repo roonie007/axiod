@@ -1,12 +1,17 @@
 export interface IData {
   [key: string]: any;
 }
+
+export interface IHeaderData {
+  [key: string]: any;
+}
+
 export type Data = string | IData | FormData;
+export type TransformRequest = (data: Data, headers?: IHeaderData) => Data;
+export type TransformResponse = (data: Data) => Data;
 
 export interface IConfig {
-  headers?: {
-    [key: string]: string;
-  };
+  headers?: IHeaderData;
   params?: {
     [key: string]: string | number | boolean;
   };
@@ -19,14 +24,14 @@ export interface IConfig {
 
   validateStatus?: Function;
   paramsSerializer?: Function;
-  transformRequest?: Function;
-  transformResponse?: Function;
+  transformRequest?: Array<TransformRequest>;
+  transformResponse?: Array<TransformResponse>;
 }
 
 export interface IRequest extends IConfig {
-  url: string;
+  url?: string;
   baseURL?: string;
-  method:
+  method?:
     | string
     | "get"
     | "post"
