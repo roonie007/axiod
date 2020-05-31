@@ -17,6 +17,7 @@ export interface IConfig {
     password: string;
   };
 
+  validateStatus?: Function;
   paramsSerializer?: Function;
   transformRequest?: Function;
   transformResponse?: Function;
@@ -37,21 +38,6 @@ export interface IRequest extends IConfig {
     | "trace"
     | "patch";
   data?: Data;
-}
-
-export interface IAxiod {
-  request: Function;
-  get: Function;
-  post: Function;
-  put: Function;
-  delete: Function;
-  options: Function;
-  head: Function;
-  connect: Function;
-  trace: Function;
-  patch: Function;
-  defaults: IRequest;
-  create: Function;
 }
 
 export interface IAxiodResponse {

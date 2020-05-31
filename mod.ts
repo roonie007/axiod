@@ -23,6 +23,9 @@ axiod.defaults = {
   method: "get",
   timeout: 0,
   withCredentials: false,
+  validateStatus: (status: number) => {
+    return status >= 200 && status < 300;
+  },
 };
 
 axiod.create = (config?: IRequest) => {
@@ -36,14 +39,17 @@ axiod.create = (config?: IRequest) => {
 axiod.request = ({
   url = "/",
   baseURL,
-  method = "get",
+  method,
   headers,
   params,
   data,
-  timeout = 0,
-  withCredentials = false,
+  timeout,
+  withCredentials,
   auth,
+  validateStatus,
   paramsSerializer,
+  transformRequest,
+  transformResponse,
 }: IRequest): Promise<IAxiodResponse> => {
   // Url and Base url
   if (baseURL) {
@@ -102,6 +108,11 @@ axiod.request = ({
 
   // Add body to Request Config
   if (data && method !== "get") {
+    // transformRequest
+    if (transformRequest) {
+      data = transformRequest(data, headers);
+    }
+
     if (typeof data === "string" || data instanceof FormData) {
       fetchRequestObject.body = data;
     } else {
@@ -143,6 +154,12 @@ axiod.request = ({
     } else {
       _data = await x.json();
     }
+
+    // transformResponse
+    if (transformResponse) {
+      _data = transformResponse(_data);
+    }
+
     const _headers: Headers = x.headers;
     const _config: IRequest = {
       url,
@@ -157,7 +174,16 @@ axiod.request = ({
       paramsSerializer,
     };
 
-    if (_status >= 200 && _status < 300) {
+    // Validate the status code
+    let isValidStatus = true;
+
+    if (validateStatus) {
+      isValidStatus = validateStatus(_status);
+    } else {
+      isValidStatus = _status >= 200 && _status < 300;
+    }
+
+    if (isValidStatus) {
       return Promise.resolve({
         status: _status,
         statusText: _statusText,

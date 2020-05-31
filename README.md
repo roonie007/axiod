@@ -137,13 +137,13 @@ axiod({
 });
 ```
 
-axios(url[, config])
+axiod(url[, config])
 // Send a GET request (default method)
 
 ```javascript
 import axiod from "https://deno.land/x/axiod/mod.ts";
 
-axios("/user/12345");
+axiod("/user/12345");
 ```
 
 ### Request method aliases
