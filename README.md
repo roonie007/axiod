@@ -106,6 +106,46 @@ Promise.all([getUserAccount(), getUserPermissions()]).then((results) => {
 
 ## Axiod API
 
+Requests can be made by passing the relevant config to axiod.
+
+axiod(config)
+// Send a POST request
+
+```javascript
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
+axiod({
+  method: "post",
+  url: "/user/12345",
+  data: {
+    firstName: "Fred",
+    lastName: "Flintstone",
+  },
+});
+```
+
+```javascript
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
+// GET request for remote image in node.js
+axiod({
+  method: "get",
+  url: "http://bit.ly/2mTM3nY",
+  responseType: "stream",
+}).then((response) => {
+  response.data.pipe(fs.createWriteStream("ada_lovelace.jpg"));
+});
+```
+
+axios(url[, config])
+// Send a GET request (default method)
+
+```javascript
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
+axios("/user/12345");
+```
+
 ### Request method aliases
 
 For convenience aliases have been provided for all supported request methods.

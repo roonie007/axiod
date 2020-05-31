@@ -8,14 +8,8 @@ import {
 } from "./interfaces.ts";
 import { methods } from "./helpers.ts";
 
-function axiod(
-  url: string | IRequest,
-  config?: IRequest,
-): Promise<IAxiodResponse> {
-  if (typeof url === "string") {
-    return axiod.request(Object.assign({}, axiod.defaults, { url }, config));
-  }
-  return axiod.request(Object.assign({}, axiod.defaults, url));
+function axiod(config: IRequest): Promise<IAxiodResponse> {
+  return axiod.request(config);
 }
 
 axiod.defaults = {
@@ -25,11 +19,9 @@ axiod.defaults = {
   withCredentials: false,
 };
 
-axiod.create = (config?: IRequest) => {
-  const instance = Object.assign({}, axiod);
+axiod.create = (config: IRequest) => {
+  const instance = axiod.bind(config);
   instance.defaults = Object.assign({}, axiod.defaults, config);
-  instance.defaults.timeout = 1000;
-
   return instance;
 };
 
@@ -44,7 +36,7 @@ axiod.request = ({
   withCredentials = false,
   auth,
   paramsSerializer,
-}: IRequest): Promise<IAxiodResponse> => {
+}: IRequest) => {
   // Url and Base url
   if (baseURL) {
     url = urlJoin(baseURL, url);
