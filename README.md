@@ -1,6 +1,6 @@
 # Axiod
 
-Promise based HTTP client for Deno inpired by axiod
+Promise based HTTP client for Deno inpired by axios
 
 ## Features
 
@@ -153,7 +153,7 @@ These are the available config options for making requests. Only the url is requ
   method: 'get', // default
 
   // `baseURL` will be prepended to `url` unless `url` is absolute.
-  // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
+  // It can be convenient to set `baseURL` for an instance of axiod to pass relative URLs
   // to methods of that instance.
   baseURL: 'https://some-domain.com/api/',
 
@@ -226,7 +226,7 @@ The response for a request contains the following information.
   // Example: `response.headers['content-type']`
   headers: {},
 
-  // `config` is the config that was provided to `axios` for the request
+  // `config` is the config that was provided to `axiod` for the request
   config: {}
 }
 ```
@@ -234,7 +234,9 @@ The response for a request contains the following information.
 When using then, you will receive the response as follows:
 
 ```javascript
-axios.get("/user/12345").then((response) => {
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
+axiod.get("/user/12345").then((response) => {
   console.log(response.data);
   console.log(response.status);
   console.log(response.statusText);
@@ -246,6 +248,8 @@ axios.get("/user/12345").then((response) => {
 ## Handling Errors
 
 ```javascript
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
 axiod.get("/user/12345").catch((error) => {
   if (error.response) {
     // The request was made and the server responded with a status code
