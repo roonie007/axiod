@@ -109,7 +109,7 @@ Promise.all([getUserAccount(), getUserPermissions()]).then((results) => {
 
 Requests can be made by passing the relevant config to axiod.
 
-axiod(config)
+**axiod(config)**
 // Send a POST request
 
 ```javascript
@@ -138,7 +138,7 @@ axiod({
 });
 ```
 
-axiod(url[, config])
+**axiod(url[, config])**
 // Send a GET request (default method)
 
 ```javascript
