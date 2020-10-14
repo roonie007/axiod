@@ -1,6 +1,6 @@
 import { urlJoin } from "https://deno.land/x/url_join/mod.ts";
 
-import {
+import type { 
   IRequest,
   IConfig,
   Data,
