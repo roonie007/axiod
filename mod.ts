@@ -107,7 +107,7 @@ axiod.request = ({
 
   // Add params to Request Config Url
   if (_params) {
-    url = urlJoin(url, `?${params}`);
+    url = urlJoin(url, `?${_params}`);
   }
 
   // Add body to Request Config
