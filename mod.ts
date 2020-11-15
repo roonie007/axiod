@@ -187,12 +187,12 @@ axiod.request = ({
     if (contentType.toLowerCase().indexOf("json") === -1) {
       // Try to convert to json
       try {
-        _data = await x.json();
+        _data = await x.clone().json();
       } catch (ex) {
-        _data = await x.text();
+        _data = await x.clone().text();
       }
     } else {
-      _data = await x.json();
+      _data = await x.clone().json();
     }
 
     // transformResponse
