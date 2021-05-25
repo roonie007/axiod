@@ -1,11 +1,6 @@
 import { urlJoin } from "https://deno.land/x/url_join/mod.ts";
 
-import type { 
-  IRequest,
-  IConfig,
-  Data,
-  IAxiodResponse,
-} from "./interfaces.ts";
+import type { Data, IAxiodResponse, IConfig, IRequest } from "./interfaces.ts";
 import { methods } from "./helpers.ts";
 
 function axiod(
@@ -32,7 +27,54 @@ axiod.create = (config?: IRequest) => {
   const instance = Object.assign({}, axiod);
   instance.defaults = Object.assign({}, axiod.defaults, config);
   instance.defaults.timeout = 1000;
-
+  instance.request = (options: IRequest): Promise<IAxiodResponse> => {
+    return axiod.request(Object.assign({}, instance.defaults, options));
+  };
+  instance.get = (url: string, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "get" }),
+    );
+  };
+  instance.post = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "post", data }),
+    );
+  };
+  instance.put = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "put", data }),
+    );
+  };
+  instance.delete = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "delete", data }),
+    );
+  };
+  instance.options = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "options", data }),
+    );
+  };
+  instance.head = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "head", data }),
+    );
+  };
+  instance.connect = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "connect", data }),
+    );
+  };
+  instance.trace = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "trace", data }),
+    );
+  };
+  instance.patch = (url: string, data?: Data, config?: IConfig) => {
+    return instance.request(
+      Object.assign({}, { url }, config, { method: "patch", data }),
+    );
+  };
   return instance;
 };
 
