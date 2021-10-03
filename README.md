@@ -1,6 +1,6 @@
 # Axiod
 
-Promise based HTTP client for Deno inpired by axios
+Promise based HTTP client for Deno inspired by axios
 
 ## Features
 
@@ -179,6 +179,19 @@ const instance = axiod.create({
   timeout: 1000,
   headers: { "X-Custom-Header": "foobar" },
 });
+```
+
+You can use type generics with Axiod
+
+```typescript
+import axiod from "https://deno.land/x/axiod/mod.ts";
+
+const { data } = await axiod<{ delay: string }>(
+  "https://postman-echo.com/delay/2"
+);
+
+// data type would be
+// {delay: string}
 ```
 
 ## Request Config

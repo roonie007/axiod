@@ -5,6 +5,7 @@
 Fixes and Functionality:
 
 - Added timeout support
+- Added type generics support ( typescript )
 - Fix falling test
 
 Huge thanks to everyone who contributed to this release:

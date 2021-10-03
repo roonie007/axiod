@@ -45,10 +45,10 @@ export interface IRequest extends IConfig {
   data?: Data;
 }
 
-export interface IAxiodResponse {
+export interface IAxiodResponse<T = any> {
   status: number;
   statusText: string;
-  data: any;
+  data: T;
   headers: Headers;
   config: IRequest;
 }

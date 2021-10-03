@@ -3,10 +3,10 @@ import { urlJoin } from "url-join";
 import type { Data, IAxiodResponse, IConfig, IRequest } from "./interfaces.ts";
 import { methods } from "./helpers.ts";
 
-function axiod(
+function axiod<T = any>(
   url: string | IRequest,
   config?: IRequest
-): Promise<IAxiodResponse> {
+): Promise<IAxiodResponse<T>> {
   if (typeof url === "string") {
     return axiod.request(Object.assign({}, axiod.defaults, { url }, config));
   }
@@ -78,7 +78,7 @@ axiod.create = (config?: IRequest) => {
   return instance;
 };
 
-axiod.request = ({
+axiod.request = <T = any>({
   url = "/",
   baseURL,
   method,
@@ -92,7 +92,7 @@ axiod.request = ({
   paramsSerializer,
   transformRequest,
   transformResponse,
-}: IRequest): Promise<IAxiodResponse> => {
+}: IRequest): Promise<IAxiodResponse<T>> => {
   // Url and Base url
   if (baseURL) {
     url = urlJoin(baseURL, url);
@@ -166,7 +166,11 @@ axiod.request = ({
       }
     }
 
-    if (typeof data === "string" || data instanceof FormData || data instanceof URLSearchParams) {
+    if (
+      typeof data === "string" ||
+      data instanceof FormData ||
+      data instanceof URLSearchParams
+    ) {
       fetchRequestObject.body = data;
     } else {
       try {
@@ -293,46 +297,48 @@ axiod.request = ({
   });
 };
 
-axiod.get = (url: string, config?: IConfig) => {
-  return axiod.request(Object.assign({}, { url }, config, { method: "get" }));
+axiod.get = <T = any>(url: string, config?: IConfig) => {
+  return axiod.request<T>(
+    Object.assign({}, { url }, config, { method: "get" })
+  );
 };
-axiod.post = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.post = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "post", data })
   );
 };
-axiod.put = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.put = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "put", data })
   );
 };
-axiod.delete = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.delete = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "delete", data })
   );
 };
-axiod.options = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.options = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "options", data })
   );
 };
-axiod.head = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.head = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "head", data })
   );
 };
-axiod.connect = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.connect = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "connect", data })
   );
 };
-axiod.trace = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.trace = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "trace", data })
   );
 };
-axiod.patch = (url: string, data?: Data, config?: IConfig) => {
-  return axiod.request(
+axiod.patch = <T = any>(url: string, data?: Data, config?: IConfig) => {
+  return axiod.request<T>(
     Object.assign({}, { url }, config, { method: "patch", data })
   );
 };
