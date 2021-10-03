@@ -3,7 +3,11 @@ import axiod from "./mod.ts";
 
 Deno.test("Axiod with credentials should fail", async () => {
   await assertThrowsAsync(async (): Promise<void> => {
-    await axiod.get("https://postman-echo.com/basic-auth");
+    await axiod.get("https://postman-echo.com/basic-auth").catch((err) => {
+      if (err.response.status >= 300) {
+        throw new Error("error");
+      }
+    });
   });
 });
 
