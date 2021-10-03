@@ -166,7 +166,7 @@ axiod.request = ({
       }
     }
 
-    if (typeof data === "string" || data instanceof FormData) {
+    if (typeof data === "string" || data instanceof FormData || data instanceof URLSearchParams) {
       fetchRequestObject.body = data;
     } else {
       try {
