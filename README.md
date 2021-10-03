@@ -28,15 +28,15 @@ import axiod from "https://deno.land/x/axiod/mod.ts";
 
 axiod
   .get("/user?ID=12345")
-  .then( (response) => {
+  .then((response) => {
     // handle success
     console.log(response);
   })
-  .catch( (error) => {
+  .catch((error) => {
     // handle error
     console.log(error);
   })
-  .then( () => {
+  .then(() => {
     // always executed
   });
 
@@ -47,13 +47,13 @@ axiod
       ID: 12345,
     },
   })
-  .then( (response) => {
+  .then((response) => {
     console.log(response);
   })
-  .catch( (error) => {
+  .catch((error) => {
     console.log(error);
   })
-  .then( () => {
+  .then(() => {
     // always executed
   });
 
@@ -65,7 +65,7 @@ const getUser = () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 ```
 
 Performing a `POST` request
@@ -332,6 +332,13 @@ axiod.get("/user/12345").catch((error) => {
   }
   console.log(error.config);
 });
+```
+
+## Testing
+
+```javascript
+// To test the module just run
+deno test --import-map ./import_map.json --allow-net
 ```
 
 ## License
