@@ -50,3 +50,14 @@ Deno.test("Axiod Create baseURL fix", async () => {
   assertEquals(data.data.data["foo1"], "bar1");
   assertEquals(data.data.data["foo2"], "bar2");
 });
+
+Deno.test("Axiod POST request with URLSearchParams", async () => {
+  const body = new URLSearchParams();
+  body.append('PARAM1', 'value1');
+  body.append('PARAM2', 'value2');
+
+  const data = await axiod.post("https://postman-echo.com/post", body);
+
+  assertEquals(data.data.form["PARAM1"], "value1");
+  assertEquals(data.data.form["PARAM2"], "value2");
+});
