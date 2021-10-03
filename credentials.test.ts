@@ -1,15 +1,10 @@
-import {
-  assertEquals,
-  assertThrowsAsync,
-} from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals, assertThrowsAsync } from "testing/asserts.ts";
 import axiod from "./mod.ts";
 
 Deno.test("Axiod with credentials should fail", async () => {
-  await assertThrowsAsync(
-    async (): Promise<void> => {
-      await axiod.get("https://postman-echo.com/basic-auth");
-    }
-  );
+  await assertThrowsAsync(async (): Promise<void> => {
+    await axiod.get("https://postman-echo.com/basic-auth");
+  });
 });
 
 Deno.test("Axiod with credentials should be ok", async () => {

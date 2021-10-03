@@ -1,11 +1,6 @@
-import { urlJoin } from "https://deno.land/x/url_join/mod.ts";
+import { urlJoin } from "url-join";
 
-import type { 
-  IRequest,
-  IConfig,
-  Data,
-  IAxiodResponse,
-} from "./interfaces.ts";
+import type { IRequest, IConfig, Data, IAxiodResponse } from "./interfaces.ts";
 import { methods } from "./helpers.ts";
 
 function axiod(config: IRequest): Promise<IAxiodResponse> {
@@ -72,10 +67,9 @@ axiod.request = ({
         headers = {};
       }
 
-      headers["Authorization"] = "Basic " +
-        btoa(
-          unescape(encodeURIComponent(`${auth.username}:${auth.password}`)),
-        );
+      headers["Authorization"] =
+        "Basic " +
+        btoa(unescape(encodeURIComponent(`${auth.username}:${auth.password}`)));
     }
   }
 
@@ -178,42 +172,42 @@ axiod.get = (url: string, config?: IConfig) => {
 };
 axiod.post = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "post", data }),
+    Object.assign({}, { url }, config, { method: "post", data })
   );
 };
 axiod.put = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "put", data }),
+    Object.assign({}, { url }, config, { method: "put", data })
   );
 };
 axiod.delete = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "delete", data }),
+    Object.assign({}, { url }, config, { method: "delete", data })
   );
 };
 axiod.options = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "options", data }),
+    Object.assign({}, { url }, config, { method: "options", data })
   );
 };
 axiod.head = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "head", data }),
+    Object.assign({}, { url }, config, { method: "head", data })
   );
 };
 axiod.connect = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "connect", data }),
+    Object.assign({}, { url }, config, { method: "connect", data })
   );
 };
 axiod.trace = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "trace", data }),
+    Object.assign({}, { url }, config, { method: "trace", data })
   );
 };
 axiod.patch = (url: string, data?: Data, config?: IConfig) => {
   return axiod.request(
-    Object.assign({}, { url }, config, { method: "patch", data }),
+    Object.assign({}, { url }, config, { method: "patch", data })
   );
 };
 

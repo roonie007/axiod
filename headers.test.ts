@@ -1,7 +1,4 @@
-import {
-  assertEquals,
-  assertThrowsAsync,
-} from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "testing/asserts.ts";
 import axiod from "./mod.ts";
 
 Deno.test("Axiod with custom request headers", async () => {
