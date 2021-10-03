@@ -192,30 +192,25 @@ axiod.request = ({
     fetchRequestObject.headers = _headers;
   }
 
-  // [TODO] Mouadh HSOUMI
-  // Remove commented test when Abort is supported by Deno
-  // https://github.com/denoland/deno/issues/5471
-  // https://github.com/Code-Hex/deno-context/issues/8
   // Timeout
-  // const controller = new AbortController();
-  // fetchRequestObject.signal = controller.signal;
+  const controller = new AbortController();
+  fetchRequestObject.signal = controller.signal;
 
-  // let timeoutVar: number = 0;
-  // console.log("timeout", timeout);
-  // if ((timeout || 0) > 0) {
-  //   timeoutVar = setTimeout(() => {
-  //     timeoutVar = 0;
-  //     console.log("Cancecled controller.abort()");
-  //     controller.abort();
-  //   }, timeout);
-  // }
+  let timeoutCounter: number = 0;
+
+  if ((timeout || 0) > 0) {
+    timeoutCounter = setTimeout(() => {
+      timeoutCounter = 0;
+      controller.abort();
+    }, timeout);
+  }
 
   // Start request
   return fetch(url, fetchRequestObject).then(async (x) => {
-    // // Clear timeout
-    // if (timeoutVar) {
-    //   clearTimeout(timeoutVar);
-    // }
+    // Clear timeout
+    if (timeoutCounter) {
+      clearTimeout(timeoutCounter);
+    }
 
     const _status: number = x.status;
     const _statusText: string = x.statusText;
