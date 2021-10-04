@@ -1,6 +1,0 @@
-{
-  "imports": {
-    "testing/": "https://deno.land/std@0.103.0/testing/",
-    "url-join": "https://deno.land/x/url_join@1.0.0/mod.ts"
-  }
-}

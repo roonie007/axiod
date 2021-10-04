@@ -1,4 +1,4 @@
-import { assertEquals } from "testing/asserts.ts";
+import { assertEquals } from "./mods/testing-assert.ts";
 import axiod from "./mod.ts";
 
 Deno.test("Axiod should have request method helpers", function () {

@@ -1,4 +1,4 @@
-import { assertEquals } from "testing/asserts.ts";
+import { assertEquals } from "./mods/testing-assert.ts";
 import axiod from "./mod.ts";
 
 Deno.test("Axiod GET request using axiod(config)", async () => {
@@ -48,8 +48,8 @@ Deno.test("Axiod Create baseURL fix", async () => {
 
 Deno.test("Axiod POST request with URLSearchParams", async () => {
   const body = new URLSearchParams();
-  body.append('PARAM1', 'value1');
-  body.append('PARAM2', 'value2');
+  body.append("PARAM1", "value1");
+  body.append("PARAM2", "value2");
 
   const data = await axiod.post("https://postman-echo.com/post", body);
 
