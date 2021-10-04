@@ -1,4 +1,4 @@
-import { urlJoin } from "url-join";
+import { urlJoin } from "./mods/url-join.ts";
 
 import type { Data, IAxiodResponse, IConfig, IRequest } from "./interfaces.ts";
 import { methods } from "./helpers.ts";

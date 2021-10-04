@@ -1,4 +1,4 @@
-import { assertEquals, assertThrowsAsync } from "testing/asserts.ts";
+import { assertEquals, assertThrowsAsync } from "./mods/testing-assert.ts";
 import axiod from "./mod.ts";
 
 Deno.test("Axiod with credentials should fail", async () => {
