@@ -26,7 +26,7 @@ axiod.defaults = {
 axiod.create = (config?: IRequest) => {
   const instance = Object.assign({}, axiod);
   instance.defaults = Object.assign({}, axiod.defaults, config);
-  instance.defaults.timeout = 1000;
+
   instance.request = (options: IRequest): Promise<IAxiodResponse> => {
     return axiod.request(Object.assign({}, instance.defaults, options));
   };
