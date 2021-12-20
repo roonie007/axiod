@@ -352,7 +352,7 @@ axiod.get("/user/12345").catch((error) => {
 
 ```javascript
 // To test the module just run
-deno test --import-map ./import_map.json --allow-net
+deno test --allow-net
 ```
 
 ## License

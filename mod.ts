@@ -92,6 +92,7 @@ axiod.request = <T = any>({
   paramsSerializer,
   transformRequest,
   transformResponse,
+  redirect,
 }: IRequest): Promise<IAxiodResponse<T>> => {
   // Url and Base url
   if (baseURL) {
@@ -209,6 +210,10 @@ axiod.request = <T = any>({
     }, timeout);
   }
 
+  if (redirect) {
+    fetchRequestObject.redirect = redirect;
+  }
+
   // Start request
   return fetch(url, fetchRequestObject).then(async (x) => {
     // Clear timeout
@@ -262,6 +267,7 @@ axiod.request = <T = any>({
       withCredentials,
       auth,
       paramsSerializer,
+      redirect,
     };
 
     // Validate the status code
@@ -270,7 +276,7 @@ axiod.request = <T = any>({
     if (validateStatus) {
       isValidStatus = validateStatus(_status);
     } else {
-      isValidStatus = _status >= 200 && _status < 300;
+      isValidStatus = _status >= 200 && _status <= 303;
     }
 
     if (isValidStatus) {

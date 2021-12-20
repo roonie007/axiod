@@ -26,6 +26,7 @@ export interface IConfig {
   paramsSerializer?: Function;
   transformRequest?: Array<TransformRequest>;
   transformResponse?: Array<TransformResponse>;
+  redirect?: RequestRedirect;
 }
 
 export interface IRequest extends IConfig {
