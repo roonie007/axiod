@@ -227,17 +227,11 @@ axiod.request = <T = any>({
     // Data
     let _data: any = null;
 
-    // Check content type and then do the needed transformations
-    const contentType = x.headers.get("content-type") || "";
-    if (contentType.toLowerCase().indexOf("json") === -1) {
-      // Try to convert to json
-      try {
-        _data = await x.clone().json();
-      } catch (ex) {
-        _data = await x.clone().text();
-      }
-    } else {
+    // Try to convert to json
+    try {
       _data = await x.clone().json();
+    } catch (ex) {
+      _data = await x.clone().text();
     }
 
     // transformResponse
