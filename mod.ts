@@ -1,7 +1,17 @@
 import { urlJoin } from './mods/url-join.ts';
 
-import type { Data, IAxiodResponse, IConfig, IRequest } from './interfaces.ts';
-import { methods } from './helpers.ts';
+import type {
+  Data,
+  IAxiodError,
+  IAxiodRequestErrorInterceptor,
+  IAxiodRequestInterceptor,
+  IAxiodResponse,
+  IAxiodResponseErrorInterceptor,
+  IAxiodResponseInterceptor,
+  IConfig,
+  IRequest,
+} from './interfaces.ts';
+import { addInterceptor, methods } from './helpers.ts';
 
 function axiod<T = any>(
   url: string | IRequest,
@@ -76,25 +86,46 @@ axiod.create = (config?: IRequest) => {
     );
   };
 
+  instance.interceptors = {
+    request: addInterceptor<IAxiodRequestInterceptor, IAxiodRequestErrorInterceptor>(),
+    response: addInterceptor<IAxiodResponseInterceptor, IAxiodResponseErrorInterceptor>(),
+  };
+
+  instance.interceptors.request.list = [];
+  instance.interceptors.response.list = [];
+
   return instance;
 };
 
-axiod.request = <T = any>({
-  url = '/',
-  baseURL,
-  method,
-  headers,
-  params,
-  data,
-  timeout,
-  withCredentials,
-  auth,
-  validateStatus,
-  paramsSerializer,
-  transformRequest,
-  transformResponse,
-  redirect,
-}: IRequest): Promise<IAxiodResponse<T>> => {
+axiod.request = async function <T = any>(config: IRequest): Promise<IAxiodResponse<T>> {
+  if (this.interceptors.request.list.length > 0) {
+    for (const interceptor of this.interceptors.request.list) {
+      if (interceptor) {
+        const { fulfilled } = interceptor;
+        if (fulfilled && config) {
+          config = await fulfilled(config);
+        }
+      }
+    }
+  }
+
+  let {
+    url = '/',
+    baseURL,
+    method,
+    headers,
+    params = {},
+    data,
+    timeout,
+    withCredentials,
+    auth,
+    validateStatus,
+    paramsSerializer,
+    transformRequest,
+    transformResponse,
+    redirect,
+  } = config;
+
   // Url and Base url
   if (baseURL) {
     url = urlJoin(baseURL, url);
@@ -273,16 +304,19 @@ axiod.request = <T = any>({
       isValidStatus = _status >= 200 && _status <= 303;
     }
 
+    let response: IAxiodResponse<T> | null = null;
+    let error: IAxiodError<T> | null = null;
+
     if (isValidStatus) {
-      return Promise.resolve({
+      response = {
         status: _status,
         statusText: _statusText,
         data: _data,
         headers: _headers,
         config: _config,
-      });
+      };
     } else {
-      const error = {
+      error = {
         response: {
           status: _status,
           statusText: _statusText,
@@ -291,9 +325,27 @@ axiod.request = <T = any>({
         },
         config: _config,
       };
-
-      return Promise.reject(error);
     }
+
+    if (this.interceptors.response.list.length > 0) {
+      for (const interceptor of this.interceptors.response.list) {
+        if (interceptor) {
+          const { fulfilled, rejected } = interceptor;
+          if (fulfilled && response) {
+            response = (await fulfilled(response)) as IAxiodResponse<T>;
+          }
+          if (rejected && error) {
+            error = await rejected(error);
+          }
+        }
+      }
+    }
+
+    if (error) {
+      return Promise.reject(error as IAxiodError<T>);
+    }
+
+    return Promise.resolve(response as IAxiodResponse<T>);
   });
 };
 
@@ -341,6 +393,11 @@ axiod.patch = <T = any>(url: string, data?: Data, config?: IConfig) => {
   return axiod.request<T>(
     Object.assign({}, { url }, config, { method: 'patch', data }),
   );
+};
+
+axiod.interceptors = {
+  request: addInterceptor<IAxiodRequestInterceptor, IAxiodRequestErrorInterceptor>(),
+  response: addInterceptor<IAxiodResponseInterceptor, IAxiodResponseErrorInterceptor>(),
 };
 
 export default axiod;

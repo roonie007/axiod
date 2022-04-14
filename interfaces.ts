@@ -54,12 +54,33 @@ export interface IAxiodResponse<T = any> {
   config: IRequest;
 }
 
-export interface IAxiodError {
+export interface IAxiodError<T = unknown> {
   response: {
     status: number;
     statusText: string;
-    data: any;
+    data: T;
     headers: Headers;
   };
   config: IRequest;
+}
+
+export type IAxiodRequestInterceptor = (config: IRequest) => IRequest;
+export type IAxiodRequestErrorInterceptor = (error: IAxiodError) => Promise<never>;
+
+export type IAxiodResponseInterceptor<T = unknown> = (response: IAxiodResponse<T>) => IAxiodResponse<T>;
+export type IAxiodResponseErrorInterceptor = (error: IAxiodError) => Promise<never>;
+
+export interface IAxiodInterceptor<Fullfill = unknown, Rejected = unknown> {
+  list: Array<
+    {
+      fulfilled?: Fullfill | null;
+      rejected?: Rejected | null;
+    } | null
+  >;
+  use: (fulfilled?: Fullfill | null | undefined, rejected?: Rejected | null | undefined) => number;
+  eject: (index: number) => void;
+}
+export interface IAxiodInterceptors {
+  request: IAxiodInterceptor<IAxiodRequestInterceptor, IAxiodRequestErrorInterceptor>;
+  response: IAxiodInterceptor<IAxiodResponseInterceptor, IAxiodResponseErrorInterceptor>;
 }
