@@ -1,5 +1,5 @@
-import { assertEquals } from './mods/testing-assert.ts';
-import axiod from './mod.ts';
+import { assertEquals } from '../mods/testing-assert.ts';
+import axiod from '../mod.ts';
 
 Deno.test('Axiod using generic type', async () => {
   const { data } = await axiod<{ delay: string }>(

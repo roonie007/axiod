@@ -1,5 +1,5 @@
-import { assertEquals, assertThrowsAsync } from './mods/testing-assert.ts';
-import axiod from './mod.ts';
+import { assertEquals, assertThrowsAsync } from '../mods/testing-assert.ts';
+import axiod from '../mod.ts';
 
 Deno.test('Axiod with big timeout', async () => {
   const data = await axiod('https://postman-echo.com/delay/2', {

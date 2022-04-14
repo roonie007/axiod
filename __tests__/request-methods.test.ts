@@ -1,5 +1,5 @@
-import { assertEquals } from './mods/testing-assert.ts';
-import axiod from './mod.ts';
+import { assertEquals } from '../mods/testing-assert.ts';
+import axiod from '../mod.ts';
 
 Deno.test('Axiod GET request using axiod(config)', async () => {
   const data = await axiod('https://postman-echo.com/get?foo1=bar1&foo2=bar2');

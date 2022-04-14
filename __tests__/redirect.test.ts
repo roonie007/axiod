@@ -1,6 +1,6 @@
-import { assertEquals } from './mods/testing-assert.ts';
-import axiod from './mod.ts';
-import { TestServer } from './mods/test-server.ts';
+import { assertEquals } from '../mods/testing-assert.ts';
+import axiod from '../mod.ts';
+import { TestServer } from '../mods/test-server.ts';
 
 const port = 8080;
 
