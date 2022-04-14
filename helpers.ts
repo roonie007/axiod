@@ -1,13 +1,13 @@
 export const methods = [
-  "get",
-  "post",
-  "put",
-  "delete",
-  "options",
-  "head",
-  "connect",
-  "trace",
-  "patch",
+  'get',
+  'post',
+  'put',
+  'delete',
+  'options',
+  'head',
+  'connect',
+  'trace',
+  'patch',
 ];
 
 // /**

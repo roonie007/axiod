@@ -34,15 +34,15 @@ export interface IRequest extends IConfig {
   baseURL?: string;
   method?:
     | string
-    | "get"
-    | "post"
-    | "put"
-    | "delete"
-    | "options"
-    | "head"
-    | "connect"
-    | "trace"
-    | "patch";
+    | 'get'
+    | 'post'
+    | 'put'
+    | 'delete'
+    | 'options'
+    | 'head'
+    | 'connect'
+    | 'trace'
+    | 'patch';
   data?: Data;
 }
 
@@ -51,5 +51,15 @@ export interface IAxiodResponse<T = any> {
   statusText: string;
   data: T;
   headers: Headers;
+  config: IRequest;
+}
+
+export interface IAxiodError {
+  response: {
+    status: number;
+    statusText: string;
+    data: any;
+    headers: Headers;
+  };
   config: IRequest;
 }

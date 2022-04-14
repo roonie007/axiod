@@ -14,9 +14,9 @@ Promise based HTTP client for Deno inspired by axios
 ## Usage
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
-axiod.get("https://google.fr").then((response) => {
+axiod.get('https://google.fr').then((response) => {
   // response
 });
 ```
@@ -24,24 +24,23 @@ axiod.get("https://google.fr").then((response) => {
 You can use type generics with Axiod
 
 ```typescript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 const { data } = await axiod<{ delay: string }>(
-  "https://postman-echo.com/delay/2"
+  'https://postman-echo.com/delay/2',
 );
 
 // data type would be
 // {delay: string}
 ```
 
-
 Performing a `GET` request
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 axiod
-  .get("/user?ID=12345")
+  .get('/user?ID=12345')
   .then((response) => {
     // handle success
     console.log(response);
@@ -56,7 +55,7 @@ axiod
 
 // Optionally the request above could also be done as
 axiod
-  .get("/user", {
+  .get('/user', {
     params: {
       ID: 12345,
     },
@@ -74,7 +73,7 @@ axiod
 // Want to use async/await? Add the `async` keyword to your outer function/method.
 const getUser = () => {
   try {
-    const response = await axiod.get("/user?ID=12345");
+    const response = await axiod.get('/user?ID=12345');
     console.log(response);
   } catch (error) {
     console.error(error);
@@ -85,12 +84,12 @@ const getUser = () => {
 Performing a `POST` request
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 axiod
-  .post("/user", {
-    firstName: "Fred",
-    lastName: "Flintstone",
+  .post('/user', {
+    firstName: 'Fred',
+    lastName: 'Flintstone',
   })
   .then((response) => {
     console.log(response);
@@ -103,14 +102,14 @@ axiod
 Performing multiple concurrent requests
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 const getUserAccount = () => {
-  return axiod.get("/user/12345");
+  return axiod.get('/user/12345');
 };
 
 const getUserPermissions = () => {
-  return axiod.get("/user/12345/permissions");
+  return axiod.get('/user/12345/permissions');
 };
 
 Promise.all([getUserAccount(), getUserPermissions()]).then((results) => {
@@ -123,42 +122,40 @@ Promise.all([getUserAccount(), getUserPermissions()]).then((results) => {
 
 Requests can be made by passing the relevant config to axiod.
 
-**axiod(config)**
-// Send a POST request
+**axiod(config)** // Send a POST request
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 axiod({
-  method: "post",
-  url: "/user/12345",
+  method: 'post',
+  url: '/user/12345',
   data: {
-    firstName: "Fred",
-    lastName: "Flintstone",
+    firstName: 'Fred',
+    lastName: 'Flintstone',
   },
 });
 ```
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 // GET request for remote image in node.js
 axiod({
-  method: "get",
-  url: "http://bit.ly/2mTM3nY",
-  responseType: "stream",
+  method: 'get',
+  url: 'http://bit.ly/2mTM3nY',
+  responseType: 'stream',
 }).then((response) => {
-  response.data.pipe(fs.createWriteStream("ada_lovelace.jpg"));
+  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'));
 });
 ```
 
-**axiod(url[, config])**
-// Send a GET request (default method)
+**axiod(url[, config])** // Send a GET request (default method)
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
-axiod("/user/12345");
+axiod('/user/12345');
 ```
 
 ### Request method aliases
@@ -185,19 +182,20 @@ axiod.patch(url[, data[, config]])
 You can create a new instance of axiod with a custom config.
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
 // axiod.create([config]);
 const instance = axiod.create({
-  baseURL: "https://some-domain.com/api/",
+  baseURL: 'https://some-domain.com/api/',
   timeout: 1000,
-  headers: { "X-Custom-Header": "foobar" },
+  headers: { 'X-Custom-Header': 'foobar' },
 });
 ```
 
 ## Request Config
 
-These are the available config options for making requests. Only the url is required. Requests will default to GET if method is not specified.
+These are the available config options for making requests. Only the url is required. Requests will default to GET if
+method is not specified.
 
 ```javascript
 {
@@ -317,9 +315,9 @@ The response for a request contains the following information.
 When using then, you will receive the response as follows:
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
-axiod.get("/user/12345").then((response) => {
+axiod.get('/user/12345').then((response) => {
   console.log(response.data);
   console.log(response.status);
   console.log(response.statusText);
@@ -331,9 +329,9 @@ axiod.get("/user/12345").then((response) => {
 ## Handling Errors
 
 ```javascript
-import axiod from "https://deno.land/x/axiod/mod.ts";
+import axiod from 'https://deno.land/x/axiod/mod.ts';
 
-axiod.get("/user/12345").catch((error) => {
+axiod.get('/user/12345').catch((error) => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -342,7 +340,7 @@ axiod.get("/user/12345").catch((error) => {
     console.log(error.response.headers);
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log("Error", error.message);
+    console.log('Error', error.message);
   }
   console.log(error.config);
 });

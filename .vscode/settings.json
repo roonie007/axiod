@@ -1,6 +1,18 @@
 {
   "deno.enable": true,
+  "deno.config": "./deno.json",
   "deno.suggest.imports.hosts": {
     "https://deno.land": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }
