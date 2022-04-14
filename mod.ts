@@ -344,3 +344,4 @@ axiod.patch = <T = any>(url: string, data?: Data, config?: IConfig) => {
 };
 
 export default axiod;
+export {axiod};
