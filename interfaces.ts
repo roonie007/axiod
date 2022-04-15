@@ -67,10 +67,10 @@ export interface IAxiodError<T = unknown> {
 export type IAxiodRequestInterceptor = (config: IRequest) => IRequest;
 export type IAxiodRequestErrorInterceptor = (error: IAxiodError) => Promise<never>;
 
-export type IAxiodResponseInterceptor<T = unknown> = (response: IAxiodResponse<T>) => IAxiodResponse<T>;
+export type IAxiodResponseInterceptor<T = any> = (response: IAxiodResponse<T>) => IAxiodResponse<T>;
 export type IAxiodResponseErrorInterceptor = (error: IAxiodError) => Promise<never>;
 
-export interface IAxiodInterceptor<Fullfill = unknown, Rejected = unknown> {
+export interface IAxiodInterceptor<Fullfill = any, Rejected = any> {
   list: Array<
     {
       fulfilled?: Fullfill | null;
