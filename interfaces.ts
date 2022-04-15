@@ -27,6 +27,7 @@ export interface IConfig {
   transformRequest?: Array<TransformRequest>;
   transformResponse?: Array<TransformResponse>;
   redirect?: RequestRedirect;
+  responseType?: ResponseType;
 }
 
 export interface IRequest extends IConfig {
@@ -84,3 +85,5 @@ export interface IAxiodInterceptors {
   request: IAxiodInterceptor<IAxiodRequestInterceptor, IAxiodRequestErrorInterceptor>;
   response: IAxiodInterceptor<IAxiodResponseInterceptor, IAxiodResponseErrorInterceptor>;
 }
+
+export type ResponseType = 'arraybuffer' | 'blob' | 'json' | 'text' | 'stream';

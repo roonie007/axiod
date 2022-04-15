@@ -126,6 +126,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
     transformRequest,
     transformResponse,
     redirect,
+    responseType = 'json',
   } = config;
 
   // Url and Base url
@@ -260,9 +261,23 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
     // Data
     let _data: any = null;
 
-    // Try to convert to json
+    // Try to auto parse data
     try {
-      _data = await x.clone().json();
+      const response = x.clone();
+
+      if (responseType === 'json') {
+        _data = await response.json();
+      } else if (responseType === 'text') {
+        _data = await response.text();
+      } else if (responseType === 'arraybuffer') {
+        _data = await response.arrayBuffer();
+      } else if (responseType === 'blob') {
+        _data = await response.blob();
+      } else if (responseType === 'stream') {
+        _data = (await response.blob()).stream();
+      } else {
+        _data = await response.text();
+      }
     } catch (ex) {
       _data = await x.clone().text();
     }
@@ -295,6 +310,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
       auth,
       paramsSerializer,
       redirect,
+      responseType,
     };
 
     // Validate the status code
