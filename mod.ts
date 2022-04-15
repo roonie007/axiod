@@ -34,11 +34,13 @@ axiod.defaults = {
 };
 
 axiod.create = (config?: IRequest) => {
-  const instance = Object.assign({}, axiod);
+  const instance = axiod.bind({});
   instance.defaults = Object.assign({}, axiod.defaults, config);
 
+  instance._request = request;
+
   instance.request = (options: IRequest): Promise<IAxiodResponse> => {
-    return axiod.request(Object.assign({}, instance.defaults, options));
+    return instance._request(Object.assign({}, instance.defaults, options));
   };
   instance.get = (url: string, config?: IConfig) => {
     return instance.request(
@@ -97,7 +99,7 @@ axiod.create = (config?: IRequest) => {
   return instance;
 };
 
-axiod.request = async function <T = any>(config: IRequest): Promise<IAxiodResponse<T>> {
+async function request<T = any>(this: typeof axiod, config: IRequest): Promise<IAxiodResponse<T>> {
   if (this.interceptors.request.list.length > 0) {
     for (const interceptor of this.interceptors.request.list) {
       if (interceptor) {
@@ -347,7 +349,10 @@ axiod.request = async function <T = any>(config: IRequest): Promise<IAxiodRespon
 
     return Promise.resolve(response as IAxiodResponse<T>);
   });
-};
+}
+
+axiod._request = request;
+axiod.request = request;
 
 axiod.get = <T = any>(url: string, config?: IConfig) => {
   return axiod.request<T>(
