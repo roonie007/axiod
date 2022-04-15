@@ -14,9 +14,9 @@ Promise based HTTP client for Deno inspired by axios
 ## Usage
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
-axiod.get('https://google.fr').then((response) => {
+axiod.get("https://google.fr").then((response) => {
   // response
 });
 ```
@@ -24,10 +24,10 @@ axiod.get('https://google.fr').then((response) => {
 You can use type generics with Axiod
 
 ```typescript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 const { data } = await axiod<{ delay: string }>(
-  'https://postman-echo.com/delay/2',
+  "https://postman-echo.com/delay/2"
 );
 
 // data type would be
@@ -84,12 +84,12 @@ const getUser = () => {
 Performing a `POST` request
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 axiod
-  .post('/user', {
-    firstName: 'Fred',
-    lastName: 'Flintstone',
+  .post("/user", {
+    firstName: "Fred",
+    lastName: "Flintstone",
   })
   .then((response) => {
     console.log(response);
@@ -102,14 +102,14 @@ axiod
 Performing multiple concurrent requests
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 const getUserAccount = () => {
-  return axiod.get('/user/12345');
+  return axiod.get("/user/12345");
 };
 
 const getUserPermissions = () => {
-  return axiod.get('/user/12345/permissions');
+  return axiod.get("/user/12345/permissions");
 };
 
 Promise.all([getUserAccount(), getUserPermissions()]).then((results) => {
@@ -125,37 +125,37 @@ Requests can be made by passing the relevant config to axiod.
 **axiod(config)** // Send a POST request
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 axiod({
-  method: 'post',
-  url: '/user/12345',
+  method: "post",
+  url: "/user/12345",
   data: {
-    firstName: 'Fred',
-    lastName: 'Flintstone',
+    firstName: "Fred",
+    lastName: "Flintstone",
   },
 });
 ```
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 // GET request for remote image in node.js
 axiod({
-  method: 'get',
-  url: 'http://bit.ly/2mTM3nY',
-  responseType: 'stream',
+  method: "get",
+  url: "http://bit.ly/2mTM3nY",
+  responseType: "stream",
 }).then((response) => {
-  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'));
+  response.data.pipe(fs.createWriteStream("ada_lovelace.jpg"));
 });
 ```
 
 **axiod(url[, config])** // Send a GET request (default method)
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
-axiod('/user/12345');
+axiod("/user/12345");
 ```
 
 ### Request method aliases
@@ -182,13 +182,13 @@ axiod.patch(url[, data[, config]])
 You can create a new instance of axiod with a custom config.
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
 // axiod.create([config]);
 const instance = axiod.create({
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: "https://some-domain.com/api/",
   timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' },
+  headers: { "X-Custom-Header": "foobar" },
 });
 ```
 
@@ -257,6 +257,12 @@ method is not specified.
     password: 's00pers3cret'
   }
 
+  // `responseType` indicates the type of data that the server will respond with
+  // options are: 'arraybuffer', 'json', 'text', 'stream'
+  // browser only: 'blob'
+  // Check __tests__/response-type.ts for some examples
+  responseType: 'json', // default
+
   // `validateStatus` defines whether to resolve or reject the promise for a given
   // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
   // or `undefined`), the promise will be resolved; otherwise, the promise will be
@@ -315,9 +321,9 @@ The response for a request contains the following information.
 When using then, you will receive the response as follows:
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
-axiod.get('/user/12345').then((response) => {
+axiod.get("/user/12345").then((response) => {
   console.log(response.data);
   console.log(response.status);
   console.log(response.statusText);
@@ -326,12 +332,75 @@ axiod.get('/user/12345').then((response) => {
 });
 ```
 
+## Interceptors
+
+You can intercept requests or responses before they are handled by then or catch.
+
+**PS: Unlike Axios, _Request_ interceptor does not have an error interceptor in Axiod, I don't really see the need for it**
+
+```javascript
+// Add a request interceptor
+axid.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  return config;
+});
+
+// Add a response interceptor
+axid.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
+```
+
+If you need to remove an interceptor later you can.
+
+```javascript
+const myInterceptor = axiod.interceptors.request.use(function () {
+  /*...*/
+});
+axiod.interceptors.request.eject(myInterceptor);
+```
+
+You can add interceptors to a custom instance of axiod.
+
+**PS: interceptors are NOT inherited from parent instance**
+
+```javascript
+const instance = axiod.create();
+instance.interceptors.request.use(function () {
+  /*...*/
+});
+```
+
+Check `./__tests__/interceptors.test.ts` for some examples
+
+### Multiple Interceptors
+
+Given you add multiple response interceptors and when the response was fulfilled
+
+- then each interceptor is executed
+- then they are executed in the order they were added
+- then only the last interceptor's result is returned
+- then every interceptor receives the result of it's predecessor
+- and when the fulfillment-interceptor throws
+  - then the following fulfillment-interceptor is not called
+  - then the following rejection-interceptor is called
+  - once caught, another following fulfill-interceptor is called again (just like in a promise chain).
+
 ## Handling Errors
 
 ```javascript
-import axiod from 'https://deno.land/x/axiod/mod.ts';
+import axiod from "https://deno.land/x/axiod/mod.ts";
 
-axiod.get('/user/12345').catch((error) => {
+axiod.get("/user/12345").catch((error) => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -340,7 +409,7 @@ axiod.get('/user/12345').catch((error) => {
     console.log(error.response.headers);
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
+    console.log("Error", error.message);
   }
   console.log(error.config);
 });
