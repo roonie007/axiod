@@ -65,7 +65,7 @@ export interface IAxiodError<T = unknown> {
   config: IRequest;
 }
 
-export type IAxiodRequestInterceptor = (config: IRequest) => IRequest;
+export type IAxiodRequestInterceptor = (config: IRequest) => IRequest | Promise<IRequest>;
 export type IAxiodRequestErrorInterceptor = (error: IAxiodError) => Promise<never>;
 
 export type IAxiodResponseInterceptor<T = any> = (response: IAxiodResponse<T>) => IAxiodResponse<T>;
