@@ -23,10 +23,7 @@ function axiod<T = any>(
   if (typeof url === 'string') {
     return axiod.request(Object.assign({}, axiod.defaults, { url }, config));
   }
-  if (this.baseURL) {
-    return axiod.request(Object.assign({}, axiod.defaults, { baseURL: this.baseURL, url: url.url }));
-  }
-  return axiod.request(Object.assign({}, axiod.defaults, url));
+  return axiod.request(Object.assign({}, axiod.defaults, url, { baseURL: this.baseURL }));
 }
 
 axiod.defaults = {
