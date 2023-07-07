@@ -346,13 +346,13 @@ You can intercept requests or responses before they are handled by then or catch
 
 ```javascript
 // Add a request interceptor
-axid.interceptors.request.use(function (config) {
+axiod.interceptors.request.use(function (config) {
   // Do something before request is sent
   return config;
 });
 
 // Add a response interceptor
-axid.interceptors.response.use(
+axiod.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
