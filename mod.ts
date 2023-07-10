@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any
+
 import { urlJoin } from './mods/url-join.ts';
 
 import type {
@@ -14,13 +16,14 @@ import type {
 import { addInterceptor, methods } from './helpers.ts';
 
 function axiod<T = any>(
+  this: any,
   url: string | IRequest,
   config?: IRequest,
 ): Promise<IAxiodResponse<T>> {
   if (typeof url === 'string') {
     return axiod.request(Object.assign({}, axiod.defaults, { url }, config));
   }
-  return axiod.request(Object.assign({}, axiod.defaults, url));
+  return axiod.request(Object.assign({}, axiod.defaults, url, { baseURL: this.baseURL }));
 }
 
 axiod.defaults = {
@@ -34,7 +37,12 @@ axiod.defaults = {
 };
 
 axiod.create = (config?: IRequest) => {
-  const instance = axiod.bind({});
+  let instance = axiod.bind({});
+  if (config && config.baseURL) {
+    instance = axiod.bind({
+      baseURL: config.baseURL
+    })
+  }
   instance.defaults = Object.assign({}, axiod.defaults, config);
 
   instance._request = request;
@@ -194,7 +202,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
       Array.isArray(transformRequest) &&
       transformRequest.length > 0
     ) {
-      for (var i = 0; i < (transformRequest || []).length; i++) {
+      for (let i = 0; i < (transformRequest || []).length; i++) {
         if (transformRequest && transformRequest[i]) {
           data = transformRequest[i](data, headers);
         }
@@ -216,7 +224,9 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
 
         headers['Accept'] = 'application/json';
         headers['Content-Type'] = 'application/json';
-      } catch (ex) {}
+      } catch {
+        // no-op
+      }
     }
   }
 
@@ -235,7 +245,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
   const controller = new AbortController();
   fetchRequestObject.signal = controller.signal;
 
-  let timeoutCounter: number = 0;
+  let timeoutCounter = 0;
 
   if ((timeout || 0) > 0) {
     timeoutCounter = setTimeout(() => {
@@ -278,7 +288,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
       } else {
         _data = await response.text();
       }
-    } catch (ex) {
+    } catch {
       _data = await x.clone().text();
     }
 
@@ -289,7 +299,7 @@ async function request<T = any>(this: typeof axiod, config: IRequest): Promise<I
         Array.isArray(transformResponse) &&
         transformResponse.length > 0
       ) {
-        for (var i = 0; i < (transformResponse || []).length; i++) {
+        for (let i = 0; i < (transformResponse || []).length; i++) {
           if (transformResponse && transformResponse[i]) {
             _data = transformResponse[i](_data);
           }
