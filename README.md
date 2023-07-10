@@ -1,3 +1,9 @@
+# [IMPORTANT]: This project is no longer maintained.
+
+## Why
+
+This module was created out of my admiration for the simplicity and clear API provided by Axios. Given that Deno now offers full support for npm, you can now use `import axios from 'npm:axios';`.
+
 # Axiod
 
 Promise based HTTP client for Deno inspired by axios
